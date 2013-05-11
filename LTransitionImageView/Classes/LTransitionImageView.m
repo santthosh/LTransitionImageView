@@ -1,4 +1,5 @@
 #import "LTransitionImageView.h"
+#import <AVFoundation/AVFoundation.h>
 
 
 #define UIColorFromHexAlpha(hexValue, a) [UIColor colorWithRed:((float)((hexValue & 0xFF0000) >> 16))/255.0 green:((float)((hexValue & 0xFF00) >> 8))/255.0 blue:((float)(hexValue & 0xFF))/255.0 alpha:a]
@@ -187,16 +188,14 @@
 }
 
 
-- (void)setImage:(UIImage *)image
-{
+- (void)setImage:(UIImage *)image {
     [self clear];
     
-    if (image)
-    {
+    if (image) {
         [self loadImageLayers];
+        [self setFrame:AVMakeRectWithAspectRatioInsideRect(image.size, self.frame)];
         
-        if (_image)
-        {
+        if (_image) {
             _fromImage = [[UIImage alloc] initWithCGImage:_image.CGImage];
             _image = image;
             
@@ -204,13 +203,10 @@
             [self bindImage];
             [self bindMaskLayer];
             [self layoutGUI];
-            
             [self startAnimation];
         }
-        else
-        {
+        else {
             _image = image;
-            
             [self showImageOnly];
         }
     }
