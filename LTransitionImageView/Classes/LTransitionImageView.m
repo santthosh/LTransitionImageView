@@ -193,7 +193,12 @@
     
     if (image) {
         [self loadImageLayers];
-        [self setFrame:AVMakeRectWithAspectRatioInsideRect(image.size, self.frame)];
+        
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        CGRect frameRect = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width);
+        if(UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation))
+            frameRect = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
+        [self setFrame:AVMakeRectWithAspectRatioInsideRect(image.size,frameRect)];
         
         if (_image) {
             _fromImage = [[UIImage alloc] initWithCGImage:_image.CGImage];
